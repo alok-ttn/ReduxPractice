@@ -16,10 +16,11 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'axfood',
-      password: 'axfood@123',
+      username: '',
+      password: '',
       headerTag: ' ',
       isLoggedin: false,
+      flag: false,
     };
   }
   onChangeText(input) {}
@@ -48,33 +49,34 @@ class Login extends React.Component {
           style={styles.touchableView}
           // onPress={() => navigation.navigate('HomeScreen')}
           onPress={() => {
-            if (loading === 1 && success === 0) {
-              return (
-                <View style={styles.Activity}>
-                  <ActivityIndicator />
-                </View>
-              );
-            } else if (loading === 0 && success === 1) {
-              navigation.navigate('HomeScreen');
-            } else if (loading === 0 && failed === 1) {
-              return Alert.alert('wrong credentials');
-            }
+            this.setState({flag: true});
           }}>
           <Text style={styles.usernameView}>press to login</Text>
         </TouchableOpacity>
         <Text>input username is: {username}</Text>
         <Text> input password is : {password}</Text>
+
+        {loading === 1 && success === 0 ? (
+          <View style={styles.Activity}>
+            <ActivityIndicator />
+          </View>
+        ) : null}
+        {loading === 0 && success === 1
+          ? navigation.navigate('HomeScreen')
+          : null}
+        {loading === 0 && failed === 1
+          ? Alert.alert('wrong credentials')
+          : null}
       </SafeAreaView>
     );
   }
 
-  componentDidMount() {
-    const {username, password} = this.state;
-    // console.warn(this.props);
-    // setTimeout(() => {
-    this.props.toggleHomeFlag(username, password);
-    //   this.props.flag;
-    // }, 4000);
+  componentDidMount() {}
+  static getDerivedStateFromProps(props, state) {
+    console.warn(state.flag);
+    if (state.flag === true) {
+      props.toggleHomeFlag(state.username, state.password);
+    }
   }
 }
 
@@ -117,6 +119,7 @@ const mapStateToProps = state => ({
   failed: state.homeReducer.isFailed,
   success: state.homeReducer.isSuccess,
   loading: state.homeReducer.isLoading,
+  token: state.homeReducer.token,
 });
 
 const mapDispatchToProps = {

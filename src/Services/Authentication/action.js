@@ -14,18 +14,17 @@ export const toggleFlag = (username, password) => dispatch => {
       }),
     },
   ).then(response => {
-    // this.splitString(response.headers.map.authorization);
-    // console.log(this.state.headerTag);
     if (!(response.status === 200)) {
       //   Alert.alert('wrong credentials');
       dispatch({
         type: LOGIN_FAILED,
+        data: {flag: false},
       });
     } else {
-      //   const data = response.json();
-      //   navigation.navigate('HomeScreen', {headerTag: this.state.headerTag});
+      var temp = response.headers.map.authorization.split(' ');
       dispatch({
         type: LOGIN_SUCCESS,
+        data: {header: temp[1], flag: false},
       });
     }
   });
