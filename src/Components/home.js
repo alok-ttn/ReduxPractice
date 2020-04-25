@@ -5,10 +5,13 @@ import {
   StyleSheet,
   TextInput,
   SafeAreaView,
+  AsyncStorage,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import {connect} from 'react-redux';
+import {toggleFlag, toggleStore} from '../Services/Authentication/action';
 
 class Home extends React.Component {
   constructor(props) {
@@ -16,60 +19,53 @@ class Home extends React.Component {
     this.state = {
       text: ' ',
       input: ' ',
-      data: '',
-      storeData: [],
+      flag: false,
       isModalVisible: false,
     };
   }
 
   render() {
-    const {route, navigation} = this.props;
-    // const headerTag = route.params.headerTag;
-    // this.state.data = headerTag;
+    const {navigation} = this.props;
     return (
       <SafeAreaView style={styles.container}>
-        <Text>{this.state.data}</Text>
-        <TouchableOpacity
-          // onPress={() => this.storeApi()}
-          onPress={() => navigation.navigate('StoreList')}>
-          <View style={styles.button}>
-            <Text>press to go to store</Text>
-          </View>
-        </TouchableOpacity>
-        <Modal
-          animationType="slide"
-          animationInTiming={1000}
-          hasBackdrop={true}
-          visible={this.state.isModalVisible}
-          onBackdropPress={this.toggleModal}>
-          <View style={styles.ModalMainVIew}>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              scrollEnabled={true}
-              data={this.state.storeData}
-              renderItem={({item}) => {
-                return (
-                  <TouchableOpacity activeOpacity={0.5}>
-                    <View style={styles.ModalFlatItemsVIew}>
-                      <View style={styles.ModalFlatInnerItemsView}>
-                        <Text style={styles.ModalTextView}>{item.storeId}</Text>
-                        <Text style={styles.ModalTextView}>
-                          {item.storeName}
-                        </Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                );
-              }}
-              keyExtractor={item => item.storeId}
-            />
-          </View>
-        </Modal>
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={true}
+          data={this.props.storeData}
+          renderItem={({item}) => {
+            return (
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => navigation.navigate('StoreList')}>
+                <View style={styles.ModalFlatItemsVIew}>
+                  <View style={styles.ModalFlatInnerItemsView}>
+                    <Text style={styles.ModalTextView}>{item.storeId}</Text>
+                    <Text style={styles.ModalTextView}>{item.storeName}</Text>
+                    <Text style={styles.ModalTextView}>{item.city}</Text>
+                    <Text style={styles.ModalTextView}>
+                      {item.storeAddress}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+          keyExtractor={item => item.productId}
+        />
       </SafeAreaView>
     );
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.toggleStore(this.props.token);
+  }
+  // static getDerivedStateFromProps(props, state) {
+  //   console.warn(props.storeData);
+  //   const {navigation} = props;
+  //   if (props.isStore === true) {
+  //     navigation.navigate('StoreList');
+  //   }
+  // }
 }
 
 const styles = StyleSheet.create({
@@ -90,26 +86,44 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   ModalFlatItemsVIew: {
-    height: 70,
+    height: 130,
     width: '100%',
+    backgroundColor: '#e0bd5c',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   ModalMainVIew: {
-    flex: 0.8,
-    backgroundColor: 'green',
+    flex: 0.7,
+    backgroundColor: '#f2f2f2',
     marginTop: 50,
   },
   ModalTextView: {
-    marginLeft: 30,
+    marginLeft: 20,
     fontSize: 20,
     fontWeight: '600',
     justifyContent: 'center',
   },
   ModalImagesView: {height: 40, width: 40},
   ModalFlatInnerItemsView: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    backgroundColor: '#bfaa6f',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 120,
   },
 });
 
-export default Home;
+const mapStateToProps = state => ({
+  token: state.homeReducer.token,
+  isStore: state.homeReducer.isStore,
+  storeData: state.homeReducer.storeAcess,
+});
+
+const mapDispatchToProps = {
+  toggleHomeFlag: toggleFlag,
+  toggleStore: toggleStore,
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Home);

@@ -2,121 +2,202 @@ import React from 'react';
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   TextInput,
-  SafeAreaView,
   TouchableOpacity,
   Alert,
-  AsyncStorage,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {toggleFlag} from '../Services/Authentication/action';
+import {toggleFlag, toggleSuccess} from '../Services/Authentication/action';
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
       password: '',
-      headerTag: ' ',
+      headerTag: '',
       isLoggedin: false,
       flag: false,
     };
   }
   onChangeText(input) {}
   render() {
-    const {navigation, loading, failed, success} = this.props;
-    const {username, password} = this.state;
+    const {loading} = this.props;
     return (
-      <SafeAreaView style={styles.container}>
-        <View>
-          <Text style={styles.usernameView}>Username</Text>
-          <TextInput
-            style={styles.TextInputView}
-            autoCapitalize="none"
-            onChangeText={txt => this.setState({username: txt})}
-          />
-        </View>
-        <View>
-          <Text style={styles.usernameView}>password</Text>
-          <TextInput
-            style={styles.TextInputView}
-            autoCapitalize="none"
-            onChangeText={txt => this.setState({password: txt})}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.touchableView}
-          // onPress={() => navigation.navigate('HomeScreen')}
-          onPress={() => {
-            this.setState({flag: true});
-          }}>
-          <Text style={styles.usernameView}>press to login</Text>
-        </TouchableOpacity>
-        <Text>input username is: {username}</Text>
-        <Text> input password is : {password}</Text>
-
-        {loading === 1 && success === 0 ? (
-          <View style={styles.Activity}>
-            <ActivityIndicator />
+      <View style={styles.container}>
+        <ImageBackground
+          source={require('../Assets/imagebackgroundlogin.png')}
+          style={styles.imageBack}>
+          <View style={styles.LogoView}>
+            <Image
+              source={require('../Assets/axfoodLogoHigh.png')}
+              style={styles.LogoStyle}
+            />
           </View>
-        ) : null}
-        {loading === 0 && success === 1
-          ? navigation.navigate('HomeScreen')
-          : null}
-        {loading === 0 && failed === 1
-          ? Alert.alert('wrong credentials')
-          : null}
-      </SafeAreaView>
+          <View style={styles.InputTextView}>
+            <TextInput
+              style={styles.inputDetails}
+              placeholder={'Enter User Id'}
+              placeholderTextColor={'#6d6d6d'}
+              autoCapitalize={false}
+              onChangeText={text => {
+                this.setState({username: text});
+              }}
+            />
+            <TextInput
+              style={styles.inputDetails}
+              placeholder={'Password'}
+              placeholderTextColor={'#6d6d6d'}
+              secureTextEntry={true}
+              autoCapitalize={false}
+              onChangeText={text => {
+                this.setState({password: text});
+              }}
+            />
+          </View>
+          <View style={styles.LowerSection}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.toggleHomeFlag(
+                  this.state.username,
+                  this.state.password,
+                );
+              }}>
+              <View style={styles.loginButton}>
+                <Text style={styles.loginText}>LOGIN</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={styles.forgotPassword}>Forgot Password?</Text>
+            </TouchableOpacity>
+
+            <View style={styles.newUserSignUp}>
+              <Text style={styles.newUserText}>New User?</Text>
+              <TouchableOpacity>
+                <Text style={styles.signUpText}> Signup</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {loading === 1 ? (
+            <View style={styles.Activity}>
+              <ActivityIndicator />
+            </View>
+          ) : null}
+        </ImageBackground>
+      </View>
     );
   }
-
+  togglesuccessvalue() {
+    this.props.toggleSuccess();
+  }
   componentDidMount() {}
   static getDerivedStateFromProps(props, state) {
-    console.warn(state.flag);
-    if (state.flag === true) {
-      props.toggleHomeFlag(state.username, state.password);
+    const {navigation, toggleSuccess} = props;
+    if (props.success === 1) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Concept'}],
+      });
+    }
+    console.warn(props.success);
+    if (props.success === 2) {
+      Alert.alert('Error', 'Wrong Login Credentials', [
+        {
+          text: 'Try Again',
+          onPress: () => toggleSuccess,
+        },
+      ]);
     }
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#E3DFDE',
+    backgroundColor: '#fff',
     flex: 1,
-    alignItems: 'center',
   },
-  usernameView: {
-    fontSize: 20,
-    color: 'black',
+  InputTextView: {
+    flex: 0.3,
+    backgroundColor: '#fff',
+    marginTop: 27,
   },
-  TextInputView: {
-    height: 40,
-    width: 300,
-    marginHorizontal: 20,
+  imageBack: {
+    flex: 1,
+    resizeMode: 'center',
+  },
+  LowerSection: {
+    flex: 0.25,
+    backgroundColor: '#fff',
+  },
+  newUserSignUp: {
+    flexDirection: 'row',
+    marginVertical: 17,
+    marginHorizontal: 15,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+  LogoView: {
+    flex: 0.25,
+    backgroundColor: '#fff',
+    justifyContent: 'flex-end',
+  },
+  forgotPassword: {
+    alignSelf: 'center',
+    fontSize: 16,
+    color: '#484848',
+    marginTop: 14,
     marginBottom: 20,
-    marginTop: 20,
-    backgroundColor: 'white',
-    borderBottomColor: '#000',
-    borderBottomWidth: 1,
+    fontWeight: '300',
   },
-  Activity: {
-    flex: 1,
+  newUserText: {
+    fontSize: 15,
+    color: '#484848',
+    alignSelf: 'flex-end',
+    fontWeight: '300',
+  },
+  loginButton: {
+    borderRadius: 4,
+    height: 50,
+    backgroundColor: '#eb5a0e',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 30,
+    marginTop: 8,
+    marginBottom: 10,
+    marginLeft: 27,
+    marginRight: 32,
   },
-  touchableView: {
-    width: 200,
-    height: 30,
-    backgroundColor: 'green',
-    alignItems: 'center',
-    marginBottom: 40,
+  LogoStyle: {
+    height: 29.5,
+    width: 124.5,
+    marginLeft: 25,
+  },
+  loginText: {
+    color: '#fff',
+    fontSize: 16,
+    paddingVertical: 13,
+  },
+  signUpText: {
+    fontSize: 15,
+    color: '#eb5a0e',
+    fontWeight: '600',
+  },
+  inputDetails: {
+    paddingVertical: 24,
+    fontSize: 15,
+    borderBottomColor: '#b5b3b1',
+    borderBottomWidth: 1,
+    marginLeft: 27,
+    marginRight: 32,
+    fontWeight: '500',
+    color: '#000',
+    marginTop: 40,
   },
 });
 
 const mapStateToProps = state => ({
-  failed: state.homeReducer.isFailed,
   success: state.homeReducer.isSuccess,
   loading: state.homeReducer.isLoading,
   token: state.homeReducer.token,
@@ -124,6 +205,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   toggleHomeFlag: toggleFlag,
+  toggleSucess: toggleSuccess,
 };
 export default connect(
   mapStateToProps,
