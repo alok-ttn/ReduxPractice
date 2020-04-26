@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 class ItemDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -49,7 +50,22 @@ class ItemDetails extends React.Component {
             </Text>
           </View>
         </View>
-        <View style={{flex:0.1,backgroundColor:'#f0f'}}></View>
+        <View style={styles.saveView}>
+          <Text style={styles.productInfoText}>Product Information</Text>
+          <TouchableOpacity>
+            <Text style={styles.saveText}>SAVE</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.linearGradientBox}>
+          <LinearGradient
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            colors={['#eddfe7', '#efdddc', '#f5ddce']}
+            style={styles.linearGradient}>
+            <Text> This is a Linear Gradient Box</Text>
+          </LinearGradient>
+        </View>
       </View>
     );
   }
@@ -66,10 +82,35 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
   },
+  linearGradientBox: {
+    marginHorizontal: 35,
+    backgroundColor: '#fff',
+    marginTop: 20,
+    flex: 0.25,
+    borderRadius: 50,
+  },
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   lowerNameView: {
     flex: 0.11,
     backgroundColor: '#fff',
     marginTop: 15,
+  },
+  productInfoText: {fontSize: 16, color: '#363636', fontWeight: '300'},
+  saveView: {
+    flex: 0.03,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    marginTop: 40,
+    marginHorizontal: 35,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   boxinnerViewPrice: {
     flex: 1,
@@ -81,6 +122,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#d4d4d4',
     borderTopWidth: 1,
   },
+  saveText: {fontSize: 15, fontWeight: '500', color: '#eb5a0e'},
   boxDataText: {fontSize: 17, fontWeight: '600', color: '#858585'},
   BoxHeadingText: {fontSize: 16, fontWeight: '500', color: '#858585'},
   innerBoxQuantityView: {
@@ -112,7 +154,7 @@ const styles = StyleSheet.create({
     marginTop: 9,
     borderRadius: 6,
   },
-  TextProductname: {fontSize: 28, marginHorizontal: 32, fontWeight: '400'},
+  TextProductname: {fontSize: 27, marginHorizontal: 32, fontWeight: '500'},
   backbutton: {
     height: 38,
     width: 38,

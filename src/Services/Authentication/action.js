@@ -6,7 +6,9 @@ import {
   STORE_SEARCH,
   STORE_CONCEPT,
   TOGGLE_SUCCESS,
+  TOGGLE_SPLASH,
 } from './constant';
+import {AsyncStorage, Alert} from 'react-native';
 export const toggleSuccess = () => dispatch => {
   dispatch({
     type: TOGGLE_SUCCESS,
@@ -40,6 +42,19 @@ export const toggleFlag = (username, password) => dispatch => {
       });
     }
   });
+};
+export const toggleSplash = () => async dispatch => {
+  try {
+    const value = await AsyncStorage.getItem('headerToken');
+    if (value !== null) {
+      dispatch({
+        type: TOGGLE_SPLASH,
+        data: value,
+      });
+    }
+  } catch (error) {
+    console.log('error in getting token', error);
+  }
 };
 export const toggleStore = header => dispatch => {
   fetch(

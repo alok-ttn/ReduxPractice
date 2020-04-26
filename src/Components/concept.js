@@ -4,15 +4,14 @@ import {
   Text,
   StyleSheet,
   Image,
-  TextInput,
   AsyncStorage,
-  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {
   toggleFlag,
   toggleStore,
+  toggleSplash,
   toggleConcept,
 } from '../Services/Authentication/action';
 import {FlatList} from 'react-native-gesture-handler';
@@ -25,6 +24,11 @@ class Concept extends React.Component {
       data: [],
     };
   }
+  _logout = async () => {
+    await AsyncStorage.clear();
+    this.props.toggleSplash();
+    this.props.navigation.navigate('Splash');
+  };
   _storeData = async () => {
     try {
       await AsyncStorage.setItem('headerToken', this.props.token);
@@ -35,34 +39,14 @@ class Concept extends React.Component {
   render() {
     const {navigation} = this.props;
     return (
-      // <SafeAreaView style={styles.container}>
-      //   <FlatList
-      //     showsHorizontalScrollIndicator={false}
-      //     showsVerticalScrollIndicator={false}
-      //     scrollEnabled={true}
-      //     data={this.props.conceptData}
-      //     renderItem={({item}) => {
-      //       return (
-      //         <TouchableOpacity
-      //           activeOpacity={0.5}
-      //           onPress={() => navigation.navigate('HomeScreen')}>
-      //           <View style={styles.ModalFlatItemsVIew}>
-      //             <View style={styles.ModalFlatInnerItemsView}>
-      //               <Text style={styles.ModalTextView}>{item.name}</Text>
-      //             </View>
-      //           </View>
-      //         </TouchableOpacity>
-      //       );
-      //     }}
-      //     keyExtractor={item => item.productId}
-      //   />
-      // </SafeAreaView>
       <View style={styles.container}>
         <View style={styles.headerView}>
           <View>
             <Text style={styles.selectConceptText}>Select Concept</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+          <TouchableOpacity
+            // onPress={() => navigation.navigate('Search')}
+            onPress={() => this._logout()}>
             <Image
               source={require('../Assets/search.png')}
               style={styles.searchIconImage}
@@ -94,6 +78,7 @@ class Concept extends React.Component {
   }
   componentDidMount() {
     this.props.toggleConcept(this.props.token);
+    this._storeData();
   }
 }
 
@@ -135,6 +120,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   toggleHomeFlag: toggleFlag,
   toggleConcept: toggleConcept,
+  toggleSplash: toggleSplash,
 };
 export default connect(
   mapStateToProps,

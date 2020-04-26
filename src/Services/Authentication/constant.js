@@ -6,3 +6,4 @@ export const STORE_ACCESS = 'STORE_ACCESS';
 export const STORE_SEARCH = 'STORE_SEARCH';
 export const STORE_CONCEPT = 'STORE_CONCEPT';
 export const TOGGLE_SUCCESS = 'TOGGLE_SUCCESS';
+export const TOGGLE_SPLASH = 'TOGGLE_SPLASH';

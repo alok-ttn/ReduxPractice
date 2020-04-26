@@ -95,19 +95,18 @@ class Login extends React.Component {
   }
   componentDidMount() {}
   static getDerivedStateFromProps(props, state) {
-    const {navigation, toggleSuccess} = props;
+    const {navigation} = props;
     if (props.success === 1) {
       navigation.reset({
         index: 0,
         routes: [{name: 'Concept'}],
       });
     }
-    console.warn(props.success);
     if (props.success === 2) {
       Alert.alert('Error', 'Wrong Login Credentials', [
         {
           text: 'Try Again',
-          onPress: () => toggleSuccess,
+          onPress: () => props.toggleSucess(),
         },
       ]);
     }

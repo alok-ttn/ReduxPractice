@@ -7,6 +7,7 @@ import {
   STORE_SEARCH,
   STORE_CONCEPT,
   TOGGLE_SUCCESS,
+  TOGGLE_SPLASH,
 } from './constant';
 const initialState = {
   isLoading: 0,
@@ -55,6 +56,11 @@ const homeReducer = (state = initialState, action) => {
         ...state,
         isSuccess: 0,
         isLoading: 0,
+      };
+    case TOGGLE_SPLASH:
+      return {
+        ...state,
+        token: action.data,
       };
     default:
       return state;
