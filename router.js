@@ -1,9 +1,10 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import LoginScreen from './src/Components/login';
-import HomeScreen from './src/Components/home';
-import StoreList from './src/Components/storeList';
+import StoreScreen from './src/Components/Store';
+import Itemdetails from './src/Components/ItemDetails';
 import Concept from './src/Components/concept';
+import Search from './src/Components/search';
 import * as React from 'react';
 import {Provider} from 'react-redux';
 import store from './src/Services/rootReducer';
@@ -20,14 +21,23 @@ const MyStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="HomeScreen"
-        component={HomeScreen}
+        name="StoreScreen"
+        component={StoreScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="StoreList" component={StoreList} />
       <Stack.Screen
         name="Concept"
         component={Concept}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ItemDetails"
+        component={Itemdetails}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
