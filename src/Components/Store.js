@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
 import {toggleFlag, toggleStore} from '../Services/Authentication/action';
 

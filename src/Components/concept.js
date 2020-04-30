@@ -1,20 +1,13 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  AsyncStorage,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {
   toggleFlag,
-  toggleStore,
   toggleSplash,
   toggleConcept,
 } from '../Services/Authentication/action';
 import {FlatList} from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-community/async-storage';
 class Concept extends React.Component {
   constructor(props) {
     super(props);
@@ -27,7 +20,7 @@ class Concept extends React.Component {
   _logout = async () => {
     await AsyncStorage.clear();
     this.props.toggleSplash();
-    this.props.navigation.navigate('Splash');
+    this.props.navigation.navigate('LoginScreen');
   };
   _storeData = async () => {
     try {

@@ -10,6 +10,8 @@ import {
 import {connect} from 'react-redux';
 import {toggleFlag, toggleSearch} from '../Services/Authentication/action';
 import {FlatList} from 'react-native-gesture-handler';
+import config from '../config/env';
+
 class Search extends React.Component {
   constructor(props) {
     super(props);
@@ -74,20 +76,21 @@ class Search extends React.Component {
   }
   componentDidMount() {}
   static getDerivedStateFromProps(props, state) {
+    let apiConfig = config.apiURl;
+    let searchURL = config.apiConfig.tempStoreApi.searchListHandle;
     var lengthOfInput = state.searchURL.length;
     if (lengthOfInput >= 3) {
-      var urlApi =
-        'https://admin-stage.priskoll.occdev.axfood.se/axfood/axfood-product-scan/searchResults/';
+      var urlApi = apiConfig + searchURL;
       var newApi = urlApi.concat(state.searchURL);
       props.toggleSearch(props.token, newApi);
       state.localSearchData = props.searchData;
     }
     if (lengthOfInput < 3) {
-      var urlApi =
-        'https://admin-stage.priskoll.occdev.axfood.se/axfood/axfood-product-scan/searchResults/';
+      var urlApi = apiConfig + searchURL;
       props.toggleSearch(props.token, urlApi);
       state.localSearchData = props.searchData;
     }
+    return null;
   }
 }
 
@@ -119,7 +122,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   headerView: {
-    flex: 0.13,
+    flex: 0.15,
     flexDirection: 'row',
     backgroundColor: '#fff',
     alignItems: 'flex-end',

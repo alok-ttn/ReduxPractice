@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {toggleFlag, toggleSuccess} from '../Services/Authentication/action';
+import {colorConstants, imageConstants} from '../config/constants';
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -29,11 +31,11 @@ class Login extends React.Component {
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={require('../Assets/imagebackgroundlogin.png')}
+          source={imageConstants.loginScreenBackGround}
           style={styles.imageBack}>
           <View style={styles.LogoView}>
             <Image
-              source={require('../Assets/axfoodLogoHigh.png')}
+              source={imageConstants.axfoodLogo}
               style={styles.LogoStyle}
             />
           </View>
@@ -41,7 +43,7 @@ class Login extends React.Component {
             <TextInput
               style={styles.inputDetails}
               placeholder={'Enter User Id'}
-              placeholderTextColor={'#6d6d6d'}
+              placeholderTextColor={colorConstants.loginPlaceHolderTextColor}
               autoCapitalize={false}
               onChangeText={text => {
                 this.setState({username: text});
@@ -50,7 +52,7 @@ class Login extends React.Component {
             <TextInput
               style={styles.inputDetails}
               placeholder={'Password'}
-              placeholderTextColor={'#6d6d6d'}
+              placeholderTextColor={colorConstants.loginPlaceHolderTextColor}
               secureTextEntry={true}
               autoCapitalize={false}
               onChangeText={text => {
@@ -93,6 +95,7 @@ class Login extends React.Component {
   togglesuccessvalue() {
     this.props.toggleSuccess();
   }
+
   componentDidMount() {}
   static getDerivedStateFromProps(props, state) {
     const {navigation} = props;
@@ -110,17 +113,16 @@ class Login extends React.Component {
         },
       ]);
     }
+    return null;
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
     flex: 1,
   },
   InputTextView: {
     flex: 0.3,
-    backgroundColor: '#fff',
     marginTop: 27,
   },
   imageBack: {
@@ -129,13 +131,11 @@ const styles = StyleSheet.create({
   },
   LowerSection: {
     flex: 0.25,
-    backgroundColor: '#fff',
   },
   newUserSignUp: {
     flexDirection: 'row',
     marginVertical: 17,
     marginHorizontal: 15,
-    backgroundColor: '#fff',
     justifyContent: 'center',
   },
   LogoView: {
@@ -146,21 +146,21 @@ const styles = StyleSheet.create({
   forgotPassword: {
     alignSelf: 'center',
     fontSize: 16,
-    color: '#484848',
+    color: colorConstants.forgotPasswordTextColor,
     marginTop: 14,
     marginBottom: 20,
     fontWeight: '300',
   },
   newUserText: {
     fontSize: 15,
-    color: '#484848',
+    color: colorConstants.forgotPasswordTextColor,
     alignSelf: 'flex-end',
     fontWeight: '300',
   },
   loginButton: {
     borderRadius: 4,
     height: 50,
-    backgroundColor: '#eb5a0e',
+    backgroundColor: colorConstants.orangecolor,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   },
   signUpText: {
     fontSize: 15,
-    color: '#eb5a0e',
+    color: colorConstants.orangecolor,
     fontWeight: '600',
   },
   inputDetails: {

@@ -8,26 +8,26 @@ import {
   TOGGLE_SUCCESS,
   TOGGLE_SPLASH,
 } from './constant';
-import {AsyncStorage, Alert} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import config from '../../config/env';
 export const toggleSuccess = () => dispatch => {
   dispatch({
     type: TOGGLE_SUCCESS,
   });
 };
 export const toggleFlag = (username, password) => dispatch => {
+  let apiConfig = config.apiURl;
+  let pageURL = config.apiConfig.authenticationApi.loginUserHandle;
   dispatch({
     type: LOGIN_START,
   });
-  fetch(
-    'https://admin-stage.priskoll.occdev.axfood.se/axfood/axfood-security/login',
-    {
-      method: 'POST',
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    },
-  ).then(response => {
+  fetch(apiConfig + pageURL, {
+    method: 'POST',
+    body: JSON.stringify({
+      username: username,
+      password: password,
+    }),
+  }).then(response => {
     if (!(response.status === 200)) {
       //   Alert.alert('wrong credentials');
       dispatch({
@@ -52,20 +52,25 @@ export const toggleSplash = () => async dispatch => {
         data: value,
       });
     }
+    if (value === null) {
+      dispatch({
+        type: TOGGLE_SPLASH,
+        data: '',
+      });
+    }
   } catch (error) {
     console.log('error in getting token', error);
   }
 };
 export const toggleStore = header => dispatch => {
-  fetch(
-    'https://admin-stage.priskoll.occdev.axfood.se/axfood/axfood-product-scan/stores',
-    {
-      method: 'GET',
-      headers: {
-        Authorization: header,
-      },
+  let apiConfig = config.apiURl;
+  let storeURL = config.apiConfig.tempStoreApi.storeListHandle;
+  fetch(apiConfig + storeURL, {
+    method: 'GET',
+    headers: {
+      Authorization: header,
     },
-  )
+  })
     .then(response => response.json())
     .then(responseJson => {
       dispatch({
@@ -93,15 +98,14 @@ export const toggleSearch = (header, newApi) => dispatch => {
     });
 };
 export const toggleConcept = header => dispatch => {
-  fetch(
-    'https://admin-rel.priskoll.occdev.axfood.se/axfood/axfood-product-scan/concepts? ',
-    {
-      method: 'GET',
-      headers: {
-        Authorization: header,
-      },
+  let apiConfig = config.conceptURL;
+  let conceptsURL = config.apiConfig.tempStoreApi.conceptListHandle;
+  fetch(apiConfig + conceptsURL, {
+    method: 'GET',
+    headers: {
+      Authorization: header,
     },
-  )
+  })
     .then(response => response.json())
     .then(responseJson => {
       dispatch({

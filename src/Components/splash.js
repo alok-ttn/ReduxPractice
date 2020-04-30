@@ -1,7 +1,10 @@
 import React from 'react';
-import {View, AsyncStorage, Image, StyleSheet} from 'react-native';
+import {View, Image, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {toggleSplash} from '../Services/Authentication/action';
+import AsyncStorage from '@react-native-community/async-storage';
+import {colorConstants, imageConstants} from '../config/constants';
+
 class Splash extends React.Component {
   constructor(props) {
     super(props);
@@ -14,10 +17,7 @@ class Splash extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.innerview}>
-          <Image
-            source={require('../Assets/axfoodLogoHigh.png')}
-            style={styles.LogoStyle}
-          />
+          <Image source={imageConstants.axfoodLogo} style={styles.LogoStyle} />
         </View>
       </View>
     );
@@ -33,13 +33,15 @@ class Splash extends React.Component {
             index: 0,
             routes: [{name: 'Concept'}],
           });
-        }, 3000);
+        }, 500);
       }
       if (value === null) {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'LoginScreen'}],
-        });
+        setTimeout(() => {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'LoginScreen'}],
+          });
+        }, 500);
       }
     } catch (error) {
       console.warn('no data');
@@ -53,7 +55,7 @@ class Splash extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f2f2e3',
+    backgroundColor: colorConstants.bacgroundColorSplash,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',

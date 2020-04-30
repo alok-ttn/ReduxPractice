@@ -9,7 +9,6 @@ import Splash from './src/Components/splash';
 import * as React from 'react';
 import {Provider} from 'react-redux';
 import store from './src/Services/rootReducer';
-import {FlatList} from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
